@@ -65,5 +65,28 @@ function show(req, res) {
     })
 }
 
+function storeReview(req,res){
 
-module.exports = { index, show }
+    const movieId= parseInt(req.params.id)
+    const {name,vote,text} = req.body
+
+    const sql= `INSERT INTO reviews (movie_id, name, vote, text)
+    VALUES (?, ?, ?, ?)`
+
+    connection.query(sql,[movieId,name,vote,text],(err,result)=>{
+        if(err){
+            console.log(err)
+            return res.status(500).json({
+                success:false,
+                message: "Database error"
+            })
+        }
+        res.json({
+            success:true,
+            message:"Added Review"
+        })
+    })
+}
+
+
+module.exports = { index, show,storeReview }
